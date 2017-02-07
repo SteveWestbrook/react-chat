@@ -1,0 +1,21 @@
+{
+  "name": "react-chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "concurrently \"npm run server-start\" \"cd client && npm start\"",
+    "server-start": "babel-node index.js"
+  },
+  "keywords": [],
+  "author": "Steven Westbrook <StevenAWestbrook@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "mocha": "^3.2.0",
+    "ws": "^2.0.1"
+  },
+  "devDependencies": {
+    "concurrently": "^3.1.0"
+  }
+}

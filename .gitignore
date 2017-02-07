@@ -1,0 +1,6 @@
+node_modules/
+plato/
+out/
+coverage/
+.*.sw*
+README.html

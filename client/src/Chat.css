@@ -1,0 +1,12 @@
+.Chat-main {
+  width: 100%;
+}
+
+.Chat-display {
+  width: 80%
+}
+
+.Chat-name {
+  height: 30px;
+  width: 40%;
+}
