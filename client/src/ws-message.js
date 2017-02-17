@@ -3,7 +3,8 @@ var WS_MESSAGE_TYPES = {
   ERROR: 0,
   SET_NICK: 1,
   SEND: 2,
-  SIGNOFF: 3
+  SIGNOFF: 3,
+  USER_LIST: 4
 };
 
 // This is intended for both client and server-side use, and won't necessarily

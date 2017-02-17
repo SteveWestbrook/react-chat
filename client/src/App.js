@@ -5,9 +5,11 @@ import Chat from './Chat'
 class App extends Component {
   render() {
     return (
-      <div>
+      <div className="App-wrapper">
         <div className="App-header">
-          <h3>react-chat: A react-based chat utility</h3>
+          <h3 className="App-title">
+            react-chat: A react-based chat utility
+          </h3>
         </div>
         <Chat />
       </div>

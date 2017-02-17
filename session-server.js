@@ -11,6 +11,17 @@ class SessionServer {
     return ws.session = new WebSocketSession(ws, this);
   }
 
+  get users() {
+    // Don't bother caching; only used on new connection 
+    let result = [];
+
+    for (var key in this.sessions) {
+      result.push(key);
+    }
+
+    return result;
+  }
+
   registerNick(owner, nick) {
     
     assert.ok(owner);

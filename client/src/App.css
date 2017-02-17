@@ -1,15 +1,23 @@
-body, html {
-  width: 100%;
-  height: 100%;
-}
 .App-header {
-  background-color: #88D;
+  background-color: #559;
   height: 35px;
-  padding: 3px;
+  width: 100vw;
   color: white;
   text-align: left;
 }
 
+.App-title {
+  height: 35px;
+  display: inline;
+  position: relative;
+  top: 6px;
+}
+
 .App-intro {
   font-size: large;
+}
+
+.App-wrapper {
+  height: 100vh;
+  width: 100%;
 }

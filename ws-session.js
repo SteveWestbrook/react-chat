@@ -11,6 +11,7 @@ class WebSocketSession {
     this.ws = ws;
     this.server = server;
 
+    ws.on('open', greet.bind(this));
     ws.on('message', processMessage.bind(this));
     ws.on('close', signOff.bind(this));
     ws.on('error', clientError);
@@ -128,6 +129,16 @@ function signOn(message) {
 function clientError(error) {
   console.error('error in client connection:');
   console.dir(error);
+}
+
+function greet() {
+  var greeting = wsmessage.createMessage(
+    WS_MESSAGE_TYPES.USER_LIST,
+    {
+      users: this.session.users
+    });
+
+  this.send(greeting);
 }
 
 module.exports = WebSocketSession;

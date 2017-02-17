@@ -1,3 +1,4 @@
+import './Chat.css'
 import React from 'react'
 import TextWindow from './TextWindow'
 import SignOn from './SignOn'
@@ -10,8 +11,8 @@ class Chat extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleRecipientChange = this.handleRecipientChange.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
     this.signOn = this.signOn.bind(this);
     this.connectionOpen = this.connectionOpen.bind(this);
@@ -19,6 +20,7 @@ class Chat extends React.Component {
     this.connectionError = this.connectionError.bind(this);
     this.connectionMessage = this.connectionMessage.bind(this);
     this.handleMessage = this.handleMessage.bind(this);
+    this.initializeConnection = this.initializeConnection.bind(this);
 
     this.state = {
       currentMessage: '',
@@ -32,7 +34,11 @@ class Chat extends React.Component {
   }
 
   componentDidMount() {
-    var ws = new WebSocket('ws://localhost:3001/');
+    this.initializeConnection();
+  }
+
+  initializeConnection() {
+    var ws = new WebSocket('ws://localhost:3000/');
     this.setState({ connection: ws });
 
     ws.onopen = this.connectionOpen;
@@ -51,23 +57,28 @@ class Chat extends React.Component {
     }
   }
 
-  sendMessage(message) {
+  sendMessage(text) {
     let message = wsmessage.createMessage(
       WS_MESSAGE_TYPES.SEND,
       {
-        recipients: this.state.recipients
+        recipients: this.state.recipients,
+        text: text
       });
 
     message = JSON.stringify(message);
     this.state.connection.send(message);
   }
 
-  handleKeyPress(e) {
-    
+  handleChange(e) {
+    this.setState({
+      currentMessage: e.target.value
+    });
   }
 
-  handleChange(e) {
-    
+  handleRecipientChange(e) {
+    this.setState({
+      recipients: e.target.value
+    });
   }
 
   signOn(nick) {
@@ -93,7 +104,13 @@ class Chat extends React.Component {
   }
 
   connectionClosed() {
-    // TODO: Retry connection if not shutting down
+    // Retry connection if not shutting down
+    var ws = this.state.connection;
+
+    // Connection is cleared on shutdown
+    if (ws != null) {
+      this.initializeConnection();
+    }
   }
 
   connectionError() {
@@ -106,7 +123,7 @@ class Chat extends React.Component {
   handleMessage(data) {
     let message;
     try {
-      message = JSON.parse(data);
+      message = JSON.parse(data.data);
     } catch (e) {
       console.error(e);
       return;
@@ -116,25 +133,31 @@ class Chat extends React.Component {
       case WS_MESSAGE_TYPES.ERROR:
         this.setState({ errorText: message.data.error });
         break;
+      case WS_MESSAGE_TYPES.USER_LIST:
+        this.setState({ users: message.users });
+        break;
       case WS_MESSAGE_TYPES.SET_NICK:
-        let updated = React.addons.update(this.state, {
+        let updatedUsers = update(this.state, {
           users: {          
             $push: [message.data.nick]
           }
         });
 
-        this.setState(updated);
+        this.setState(updatedUsers);
         
         break;
       case WS_MESSAGE_TYPES.SEND:
-        let updated = React.addons.update(this.state, {
+        let updatedMessages = update(this.state, {
           messages: {
             $push: [{
               from: message.data.from,
               text: message.data.text
             }]
           }
-        })
+        });
+
+        this.setState(updatedMessages);
+
         break;
       case WS_MESSAGE_TYPES.SIGNOFF:
         this.setState((state) => {
@@ -142,9 +165,8 @@ class Chat extends React.Component {
           let nick = message.data.nick;
           let index = -1;
 
-          while ((index = state.users.indexOf) >= 0) {
-            users = users.slice(0, index).concat(
-              users.slice(index+1));
+          while ((index = state.users.indexOf(nick)) >= 0) {
+            users.splice(index);
           }
 
           return { users: users };
@@ -160,11 +182,29 @@ class Chat extends React.Component {
     return (
       <div className="Chat-main">
         <SignOn signOn={this.signOn}/>
-        <TextWindow />
-        <textarea 
-          onKeyPress={this.handleKeyPress} 
-          onChange={this.handleChange}
-          value={this.state.currentMessage}/>
+        <div className="Chat-messages">
+          <TextWindow messages={this.state.messages} />
+          <textarea 
+            className="Chat-entry"
+            onChange={this.handleChange}
+            value={this.state.currentMessage}/>
+        </div>
+
+        <div className="Chat-recipients-container">
+          <select 
+            className="Chat-recipients"
+            multiple 
+            value={this.state.users} 
+            onChange={this.handleRecipientChange}>
+            {
+              (
+                this.state.users.map((user) => {
+                  return (<option key={user}>{user}</option>);
+                })
+              )
+            }
+          </select>
+        </div>
       </div>
     );
   }

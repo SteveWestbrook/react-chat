@@ -1,12 +1,19 @@
 .SignOn-main {
-  width: 80%;
+  position: absolute;
+  top: 7px;
+  right: 2px;
   text-align: center;
+  height: 35px;
+  z-order: 1;
+  margin-right: 4px;
 }
 
 .SignOn-text {
-  
 }
 
 .SignOn-button {
-  width: 60px;  
+  width: 80px;  
+  margin-left: 2px;
+  position: relative;
+  left: 2px;
 }

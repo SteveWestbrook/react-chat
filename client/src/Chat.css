@@ -1,12 +1,49 @@
 .Chat-main {
+  box-sizing: border-box;
+  margin: auto;
   width: 100%;
-}
-
-.Chat-display {
-  width: 80%
+  height: calc(100% - 39px);
+  background-color: green;
 }
 
 .Chat-name {
   height: 30px;
   width: 40%;
+}
+
+.Chat-messages {
+  box-sizing: border-box;
+  background-color: blue;
+  height: 100%;
+  width: 80%;
+}
+
+.Chat-entry {
+  box-sizing: border-box;
+  width: 100%;
+  height: 10%;
+}
+
+.Chat-recipients-container {
+  box-sizing: border-box;
+  position: relative;
+  right: 0px;
+  top: -100%;
+  width: 20%;
+  height: 100%;
+  margin-left: auto;
+  margin-right: 1px;
+}
+
+.Chat-online {
+  text-align: right;
+  font-weight: bold;
+  font-size: 10pt;
+  color: #559;
+}
+
+.Chat-recipients {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
 }

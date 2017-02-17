@@ -1,0 +1,10 @@
+.Text-window {
+  box-sizing: border-box;
+  height: 90%;
+  background-color: white;
+  border: 1px #aaa solid;
+}
+
+.Text-message {
+  overflow: auto;
+}
